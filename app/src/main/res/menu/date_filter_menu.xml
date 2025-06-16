@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/filter_today"
+        android:title="Today" />
+    <item
+        android:id="@+id/filter_yesterday"
+        android:title="Yesterday" />
+    <item
+        android:id="@+id/filter_7_days"
+        android:title="Last 7 Days" />
+    <item
+        android:id="@+id/filter_30_days"
+        android:title="Last 30 Days" />
+    <!-- NEW OPTIONS ADDED BELOW -->
+    <item
+        android:id="@+id/filter_5_years"
+        android:title="Last 5 Years" />
+    <item
+        android:id="@+id/filter_custom"
+        android:title="Custom Range..." />
+</menu>

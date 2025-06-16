@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <!-- Status Colors -->
+    <color name="status_in_background">#E3F2FD</color> <!-- Light Blue -->
+    <color name="status_in_text">#1565C0</color>       <!-- Dark Blue -->
+    <color name="status_pending_background">#FFF3E0</color> <!-- Light Orange -->
+    <color name="status_pending_text">#E65100</color>      <!-- Dark Orange -->
+    <color name="status_out_background">#E8F5E9</color>   <!-- Light Green -->
+    <color name="status_out_text">#2E7D32</color>        <!-- Dark Green -->
+</resources>

@@ -1,0 +1,48 @@
+<resources>
+    <string name="app_name">Mobile Repair Shop</string>
+    <string name="dashboard_title">Repair Dashboard</string>
+    <string name="add_new_repair_title">Add New Repair</string>
+    <string name="repair_details_title">Repair Details</string>
+    <string name="capture_photo">Capture Photo</string>
+    <string name="customer_name_hint">Customer Name</string>
+    <string name="customer_contact_hint">Customer Contact Number</string>
+    <string name="alternate_contact_hint">Alternate Contact Number (Optional)</string>
+    <string name="imei_hint">IMEI Number (Optional)</string>
+    <string name="total_cost_hint">Total Cost</string>
+    <string name="advance_taken_hint">Advance Taken</string>
+    <string name="save_repair">Save Repair</string>
+    <string name="update_status">Update Status</string>
+    <string name="send_whatsapp_message">Send WhatsApp Message</string>
+    <string name="search_hint">Search by Name or Number...</string>
+    <string name="status_in">In</string>
+    <string name="status_pending">Pending</string>
+    <string name="status_out">Out</string>
+
+    <!-- NEW: Formatted Strings for Detail Screen -->
+    <string name="detail_title_format">Repair ID: %1$d</string>
+    <string name="customer_name_format">Customer: %1$s</string>
+    <string name="contact_format">Contact: %1$s</string>
+    <string name="alt_contact_format">Alt Contact: %1$s</string>
+    <string name="imei_format">IMEI: %1$s</string>
+    <string name="date_added_format">Date Added: %1$s</string>
+    <string name="total_cost_format">Total Cost: ₹%.2f</string>
+    <string name="advance_taken_format">Advance: ₹%.2f</string>
+    <string name="remaining_due_format">Remaining Due: ₹%.2f</string>
+    <string name="not_applicable">N/A</string>
+    <string name="advance_error">Advance cannot exceed Total Cost</string>
+    <string name="estimated_revenue">Estimated Revenue</string>
+    <string name="actual_revenue">Actual Revenue</string>
+    <string name="upcoming_revenue">Upcoming Revenue</string>
+    <!--
+    This is a placeholder for the Google Sign-In configuration.
+    It's required for the app to compile.
+    You would get the real value from your Firebase project's google-services.json file.
+    -->
+    <string name="default_web_client_id" translatable="false">399146514183-ru3035lk071gvq7hgh985f10vo2cko7b.apps.googleusercontent.com</string>
+
+    <string-array name="status_array">
+        <item>@string/status_in</item>
+        <item>@string/status_pending</item>
+        <item>@string/status_out</item>
+    </string-array>
+</resources>
