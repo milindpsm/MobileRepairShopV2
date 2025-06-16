@@ -16,6 +16,33 @@
             android:layout_height="?attr/actionBarSize"
             app:title="@string/dashboard_title" />
 
+        <!-- MOVED: Order Action Buttons are now here -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:paddingBottom="8dp">
+
+            <Button
+                android:id="@+id/buttonViewOrders"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="4dp"
+                android:layout_weight="1"
+                android:text="View Orders" />
+
+            <Button
+                android:id="@+id/buttonAddOrder"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_weight="1"
+                android:text="Add Order" />
+        </LinearLayout>
+
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
@@ -58,22 +85,18 @@
                         android:columnCount="3"
                         android:rowCount="2">
 
-                        <!-- Job Status Counts -->
                         <TextView
                             android:layout_columnWeight="1"
-                            android:layout_gravity="center"
                             android:gravity="center"
                             android:text="IN"
                             android:textAppearance="?attr/textAppearanceTitleMedium" />
                         <TextView
                             android:layout_columnWeight="1"
-                            android:layout_gravity="center"
                             android:gravity="center"
                             android:text="OUT"
                             android:textAppearance="?attr/textAppearanceTitleMedium" />
                         <TextView
                             android:layout_columnWeight="1"
-                            android:layout_gravity="center"
                             android:gravity="center"
                             android:text="PENDING"
                             android:textAppearance="?attr/textAppearanceTitleMedium" />
@@ -81,7 +104,6 @@
                         <TextView
                             android:id="@+id/statInCount"
                             android:layout_columnWeight="1"
-                            android:layout_gravity="center"
                             android:gravity="center"
                             android:text="0"
                             android:textAppearance="?attr/textAppearanceDisplaySmall"
@@ -89,7 +111,6 @@
                         <TextView
                             android:id="@+id/statOutCount"
                             android:layout_columnWeight="1"
-                            android:layout_gravity="center"
                             android:gravity="center"
                             android:text="0"
                             android:textAppearance="?attr/textAppearanceDisplaySmall"
@@ -97,15 +118,12 @@
                         <TextView
                             android:id="@+id/statPendingCount"
                             android:layout_columnWeight="1"
-                            android:layout_gravity="center"
                             android:gravity="center"
                             android:text="0"
                             android:textAppearance="?attr/textAppearanceDisplaySmall"
                             android:textColor="@android:color/holo_orange_dark" />
                     </GridLayout>
-
                 </LinearLayout>
-
             </com.google.android.material.card.MaterialCardView>
 
             <!-- Revenue Section -->
@@ -165,27 +183,25 @@
                         android:text="₹0.00"
                         android:textAppearance="?attr/textAppearanceHeadlineSmall"
                         android:textColor="@android:color/holo_orange_dark" />
-
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-
-            <!-- Search and List Section -->
-            <androidx.appcompat.widget.SearchView
-                android:id="@+id/searchView"
-                android:layout_width="match_parent"
+            <!-- Search and List Section for Repairs -->
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="Recent Repairs"
+                android:textAppearance="?attr/textAppearanceTitleMedium"
                 android:layout_marginTop="16dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                app:iconifiedByDefault="false"
-                app:queryHint="@string/search_hint" />
+                android:layout_marginStart="8dp"/>
 
+            <!-- This is where the Search Icon in the toolbar will control -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerViewRepairs"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
+                android:nestedScrollingEnabled="false"
                 tools:itemCount="5"
                 tools:listitem="@layout/item_repair" />
 

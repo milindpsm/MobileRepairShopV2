@@ -2,16 +2,14 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("com.google.devtools.ksp")
-    // IMPORTANT: Re-enable the google services plugin
-
 }
 
 android {
-    namespace = "com.example.mobilerepairshopv2" // Make sure this matches your new project's package name
+    namespace = "com.example.mobilerepairshopv2"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.mobilerepairshopv2" // Make sure this matches your new project's package name
+        applicationId = "com.example.mobilerepairshopv2"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
@@ -38,20 +36,17 @@ android {
     buildFeatures {
         viewBinding = true
     }
-    packagingOptions {
-        resources.excludes.add("META-INF/INDEX.LIST")
-        resources.excludes.add("/META-INF/{AL2.0,LGPL2.1}")
-        resources.excludes.add("META-INF/DEPENDENCIES")
-    }
 }
 
 dependencies {
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.11.0")
+    // Ensure we are only using these direct dependency versions
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.activity:activity-ktx:1.8.2")
 
-    // Room, Lifecycle, Coroutines, Glide, WorkManager, Gson
+    // Room, Lifecycle, Coroutines, Glide, etc.
     val room_version = "2.6.1"
     implementation("androidx.room:room-runtime:$room_version")
     implementation("androidx.room:room-ktx:$room_version")
@@ -61,13 +56,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
     implementation("com.github.bumptech.glide:glide:4.16.0")
-
     implementation("com.google.code.gson:gson:2.10.1")
-
-    // Firebase and Google Auth Dependencies
-
-
-
 
     // Testing
     testImplementation("junit:junit:4.13.2")

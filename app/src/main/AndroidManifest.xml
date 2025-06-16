@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-
     <!-- ADD THIS LINE for Google Drive Access -->
     <uses-permission android:name="android.permission.INTERNET" />
 
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
-    <uses-permission android:name="android.permission.CAMERA" />
 
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:name=".RepairShopApplication"
@@ -22,8 +21,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MobileRepairShopV2"
         tools:targetApi="31">
-
-        <!-- Add this provider to securely share files with other apps like the camera -->
+        <activity
+            android:name=".OrderDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AddOrderActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ViewOrdersActivity"
+            android:exported="false" /> <!-- Add this provider to securely share files with other apps like the camera -->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
@@ -32,30 +38,24 @@
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
-        </provider>
-
-        <!-- Main Dashboard Activity -->
+        </provider> <!-- Main Dashboard Activity -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-
-        <!-- Add New Repair Activity -->
+        </activity> <!-- Add New Repair Activity -->
         <activity
             android:name=".AddRepairActivity"
             android:label="@string/add_new_repair_title"
-            android:parentActivityName=".MainActivity" />
-
-        <!-- Repair Detail Activity -->
+            android:parentActivityName=".MainActivity" /> <!-- Repair Detail Activity -->
         <activity
             android:name=".RepairDetailActivity"
             android:label="@string/repair_details_title"
             android:parentActivityName=".MainActivity" />
-
     </application>
 
 </manifest>

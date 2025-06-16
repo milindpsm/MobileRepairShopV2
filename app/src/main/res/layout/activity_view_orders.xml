@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ViewOrdersActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:title="Orders Dashboard" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <!-- Statistics Section -->
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        app:cardElevation="4dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- NEW: Date Filter Button -->
+            <Button
+                android:id="@+id/buttonDateFilterOrders"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:text="All Time"
+                app:icon="@drawable/ic_menu_sort_by_size" />
+
+            <GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:columnCount="3"
+                android:rowCount="2">
+
+                <TextView
+                    android:layout_columnWeight="1"
+                    android:gravity="center"
+                    android:text="IN"
+                    android:textAppearance="?attr/textAppearanceTitleMedium" />
+
+                <TextView
+                    android:layout_columnWeight="1"
+                    android:gravity="center"
+                    android:text="OUT"
+                    android:textAppearance="?attr/textAppearanceTitleMedium" />
+
+                <TextView
+                    android:layout_columnWeight="1"
+                    android:gravity="center"
+                    android:text="PENDING"
+                    android:textAppearance="?attr/textAppearanceTitleMedium" />
+
+                <TextView
+                    android:id="@+id/statOrderInCount"
+                    android:layout_columnWeight="1"
+                    android:gravity="center"
+                    android:text="0"
+                    android:textAppearance="?attr/textAppearanceDisplaySmall"
+                    android:textColor="?attr/colorPrimary" />
+
+                <TextView
+                    android:id="@+id/statOrderOutCount"
+                    android:layout_columnWeight="1"
+                    android:gravity="center"
+                    android:text="0"
+                    android:textAppearance="?attr/textAppearanceDisplaySmall"
+                    android:textColor="@android:color/holo_green_dark" />
+
+                <TextView
+                    android:id="@+id/statOrderPendingCount"
+                    android:layout_columnWeight="1"
+                    android:gravity="center"
+                    android:text="0"
+                    android:textAppearance="?attr/textAppearanceDisplaySmall"
+                    android:textColor="@android:color/holo_orange_dark" />
+
+            </GridLayout>
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Search and List Section -->
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/searchViewOrders"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        app:iconifiedByDefault="false"
+        app:queryHint="Search orders..." />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewOrders"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="8dp"
+        tools:itemCount="5"
+        tools:listitem="@layout/item_order" />
+
+</LinearLayout>

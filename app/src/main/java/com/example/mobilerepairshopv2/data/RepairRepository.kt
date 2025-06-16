@@ -1,18 +1,20 @@
 package com.example.mobilerepairshopv2.data
 
 import androidx.room.Transaction
+import com.example.mobilerepairshopv2.data.local.OrderDao
 import com.example.mobilerepairshopv2.data.local.RepairDao
 import com.example.mobilerepairshopv2.data.model.DashboardStats
+import com.example.mobilerepairshopv2.data.model.Order
+import com.example.mobilerepairshopv2.data.model.OrderDashboardStats
 import com.example.mobilerepairshopv2.data.model.Repair
 import kotlinx.coroutines.flow.Flow
 
 /**
- * The Repository class abstracts access to multiple data sources.
- * In this app, we only have one data source: the Room database.
- * It provides a clean API for data access to the rest of the application.
+ * The Repository now manages both Repair and Order DAOs.
  */
-class RepairRepository(private val repairDao: RepairDao) {
+class RepairRepository(private val repairDao: RepairDao, private val orderDao: OrderDao) {
 
+    // --- Repair Functions ---
     val allRepairs: Flow<List<Repair>> = repairDao.getAllRepairsOrderedByDate()
     val pendingCount: Flow<Int> = repairDao.getPendingCount()
 
@@ -48,5 +50,34 @@ class RepairRepository(private val repairDao: RepairDao) {
     suspend fun restoreFromBackup(repairs: List<Repair>) {
         repairDao.clearAll()
         repairs.forEach { repairDao.insert(it) }
+    }
+
+    // --- NEW: Order Functions ---
+    val allOrders: Flow<List<Order>> = orderDao.getAllOrders()
+    fun getOrderStatsForPeriod(startDate: Long, endDate: Long): Flow<OrderDashboardStats?> {
+        return orderDao.getOrderStats(startDate, endDate)
+    }
+
+
+
+
+    fun getOrderById(id: Long): Flow<Order?> {
+        return orderDao.getOrderById(id)
+    }
+
+    fun searchOrders(query: String): Flow<List<Order>> {
+        return orderDao.searchOrders(query)
+    }
+
+    suspend fun insertOrder(order: Order) {
+        orderDao.insert(order)
+    }
+
+    suspend fun updateOrder(order: Order) {
+        orderDao.update(order)
+    }
+
+    suspend fun deleteOrder(order: Order) {
+        orderDao.delete(order)
     }
 }
