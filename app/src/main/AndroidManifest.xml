@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-    <!-- ADD THIS LINE for Google Drive Access -->
-    <uses-permission android:name="android.permission.INTERNET" />
 
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
-
     <uses-permission android:name="android.permission.CAMERA" />
 
     <application
@@ -19,17 +16,8 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.MobileRepairShopV2"
-        tools:targetApi="31">
-        <activity
-            android:name=".OrderDetailActivity"
-            android:exported="false" />
-        <activity
-            android:name=".AddOrderActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ViewOrdersActivity"
-            android:exported="false" /> <!-- Add this provider to securely share files with other apps like the camera -->
+        android:theme="@style/Theme.MobileRepairShopV2">
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
@@ -38,24 +26,46 @@
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
-        </provider> <!-- Main Dashboard Activity -->
+        </provider>
+
+        <!-- NEW: WelcomeActivity is now the starting point -->
         <activity
-            android:name=".MainActivity"
+            android:name=".WelcomeActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- Add New Repair Activity -->
+        </activity>
+
+        <!-- MainActivity is now a regular activity -->
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/dashboard_title"
+            android:parentActivityName=".WelcomeActivity" />
+
+        <!-- Other Activities -->
         <activity
             android:name=".AddRepairActivity"
             android:label="@string/add_new_repair_title"
-            android:parentActivityName=".MainActivity" /> <!-- Repair Detail Activity -->
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".RepairDetailActivity"
             android:label="@string/repair_details_title"
             android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".ViewOrdersActivity"
+            android:label="Orders Dashboard"
+            android:parentActivityName=".WelcomeActivity" />
+        <activity
+            android:name=".AddOrderActivity"
+            android:label="Add New Order"
+            android:parentActivityName=".ViewOrdersActivity" />
+        <activity
+            android:name=".OrderDetailActivity"
+            android:label="Order Details"
+            android:parentActivityName=".ViewOrdersActivity" />
+
     </application>
 
 </manifest>

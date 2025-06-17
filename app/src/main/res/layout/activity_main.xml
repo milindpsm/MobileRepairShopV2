@@ -16,33 +16,6 @@
             android:layout_height="?attr/actionBarSize"
             app:title="@string/dashboard_title" />
 
-        <!-- MOVED: Order Action Buttons are now here -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingStart="8dp"
-            android:paddingEnd="8dp"
-            android:paddingBottom="8dp">
-
-            <Button
-                android:id="@+id/buttonViewOrders"
-                style="?attr/materialButtonOutlinedStyle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="4dp"
-                android:layout_weight="1"
-                android:text="View Orders" />
-
-            <Button
-                android:id="@+id/buttonAddOrder"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:layout_weight="1"
-                android:text="Add Order" />
-        </LinearLayout>
-
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
@@ -62,13 +35,11 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
                 app:cardElevation="4dp">
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:padding="16dp">
-
                     <Button
                         android:id="@+id/buttonDateFilter"
                         style="?attr/materialButtonOutlinedStyle"
@@ -77,51 +48,18 @@
                         android:layout_gravity="end"
                         android:text="Last 7 Days"
                         app:icon="@drawable/ic_menu_sort_by_size" />
-
                     <GridLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:columnCount="3"
                         android:rowCount="2">
-
-                        <TextView
-                            android:layout_columnWeight="1"
-                            android:gravity="center"
-                            android:text="IN"
-                            android:textAppearance="?attr/textAppearanceTitleMedium" />
-                        <TextView
-                            android:layout_columnWeight="1"
-                            android:gravity="center"
-                            android:text="OUT"
-                            android:textAppearance="?attr/textAppearanceTitleMedium" />
-                        <TextView
-                            android:layout_columnWeight="1"
-                            android:gravity="center"
-                            android:text="PENDING"
-                            android:textAppearance="?attr/textAppearanceTitleMedium" />
-
-                        <TextView
-                            android:id="@+id/statInCount"
-                            android:layout_columnWeight="1"
-                            android:gravity="center"
-                            android:text="0"
-                            android:textAppearance="?attr/textAppearanceDisplaySmall"
-                            android:textColor="?attr/colorPrimary" />
-                        <TextView
-                            android:id="@+id/statOutCount"
-                            android:layout_columnWeight="1"
-                            android:gravity="center"
-                            android:text="0"
-                            android:textAppearance="?attr/textAppearanceDisplaySmall"
-                            android:textColor="@android:color/holo_green_dark" />
-                        <TextView
-                            android:id="@+id/statPendingCount"
-                            android:layout_columnWeight="1"
-                            android:gravity="center"
-                            android:text="0"
-                            android:textAppearance="?attr/textAppearanceDisplaySmall"
-                            android:textColor="@android:color/holo_orange_dark" />
+                        <TextView android:layout_columnWeight="1" android:gravity="center" android:text="IN" android:textAppearance="?attr/textAppearanceTitleMedium" />
+                        <TextView android:layout_columnWeight="1" android:gravity="center" android:text="OUT" android:textAppearance="?attr/textAppearanceTitleMedium" />
+                        <TextView android:layout_columnWeight="1" android:gravity="center" android:text="PENDING" android:textAppearance="?attr/textAppearanceTitleMedium" />
+                        <TextView android:id="@+id/statInCount" android:layout_columnWeight="1" android:gravity="center" android:text="0" android:textAppearance="?attr/textAppearanceDisplaySmall" android:textColor="?attr/colorPrimary" />
+                        <TextView android:id="@+id/statOutCount" android:layout_columnWeight="1" android:gravity="center" android:text="0" android:textAppearance="?attr/textAppearanceDisplaySmall" android:textColor="@android:color/holo_green_dark" />
+                        <TextView android:id="@+id/statPendingCount" android:layout_columnWeight="1" android:gravity="center" android:text="0" android:textAppearance="?attr/textAppearanceDisplaySmall" android:textColor="@android:color/holo_orange_dark" />
                     </GridLayout>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -133,60 +71,21 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 app:cardElevation="4dp">
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:padding="16dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/estimated_revenue"
-                        android:textAppearance="?attr/textAppearanceTitleMedium" />
-                    <TextView
-                        android:id="@+id/statEstimatedRevenue"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:text="₹0.00"
-                        android:textAppearance="?attr/textAppearanceHeadlineSmall"
-                        android:textColor="?attr/colorPrimary" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:text="@string/actual_revenue"
-                        android:textAppearance="?attr/textAppearanceTitleMedium" />
-                    <TextView
-                        android:id="@+id/statActualRevenue"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:text="₹0.00"
-                        android:textAppearance="?attr/textAppearanceHeadlineSmall"
-                        android:textColor="@android:color/holo_green_dark" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:text="@string/upcoming_revenue"
-                        android:textAppearance="?attr/textAppearanceTitleMedium" />
-                    <TextView
-                        android:id="@+id/statUpcomingRevenue"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:text="₹0.00"
-                        android:textAppearance="?attr/textAppearanceHeadlineSmall"
-                        android:textColor="@android:color/holo_orange_dark" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/estimated_revenue" android:textAppearance="?attr/textAppearanceTitleMedium" />
+                    <TextView android:id="@+id/statEstimatedRevenue" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="₹0.00" android:textAppearance="?attr/textAppearanceHeadlineSmall" android:textColor="?attr/colorPrimary" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:text="@string/actual_revenue" android:textAppearance="?attr/textAppearanceTitleMedium" />
+                    <TextView android:id="@+id/statActualRevenue" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="₹0.00" android:textAppearance="?attr/textAppearanceHeadlineSmall" android:textColor="@android:color/holo_green_dark" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:text="@string/upcoming_revenue" android:textAppearance="?attr/textAppearanceTitleMedium" />
+                    <TextView android:id="@+id/statUpcomingRevenue" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="₹0.00" android:textAppearance="?attr/textAppearanceHeadlineSmall" android:textColor="@android:color/holo_orange_dark" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Search and List Section for Repairs -->
+            <!-- List Section for Repairs -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -195,7 +94,6 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginStart="8dp"/>
 
-            <!-- This is where the Search Icon in the toolbar will control -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerViewRepairs"
                 android:layout_width="match_parent"

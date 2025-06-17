@@ -34,6 +34,7 @@ interface RepairDao {
         SELECT
             (SELECT COUNT(*) FROM repairs_table WHERE dateAdded BETWEEN :startDate AND :endDate) as inCount,
             (SELECT COUNT(*) FROM repairs_table WHERE status = 'Out' AND dateCompleted BETWEEN :startDate AND :endDate) as outCount,
+            (SELECT COUNT(*) FROM repairs_table WHERE status = 'Pending') as pendingCount,
             (SELECT SUM(totalCost) FROM repairs_table WHERE dateAdded BETWEEN :startDate AND :endDate) as estimatedRevenue,
             (SELECT SUM(advanceTaken) FROM repairs_table WHERE status != 'Out' AND dateAdded BETWEEN :startDate AND :endDate) as advanceFromPending,
             (SELECT SUM(totalCost) FROM repairs_table WHERE status = 'Out' AND dateCompleted BETWEEN :startDate AND :endDate) as revenueFromOut,

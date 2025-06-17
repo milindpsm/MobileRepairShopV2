@@ -31,11 +31,17 @@ class OrderAdapter(private val onItemClicked: (Order) -> Unit) :
         fun bind(order: Order) {
             val context = binding.root.context
             binding.textViewOrderId.text = "ID: ${order.id}"
+
+            // --- THIS IS THE NEW LOGIC ---
+            // If the customer name is not empty, show it.
+            // Otherwise, show the customer contact number instead.
             binding.textViewCustomerName.text = if (!order.customerName.isNullOrEmpty()) {
                 order.customerName
             } else {
                 order.customerContact
             }
+            // --- END OF NEW LOGIC ---
+
             binding.chipStatus.text = order.status
 
             if (order.status == context.getString(R.string.status_out)) {
@@ -43,7 +49,8 @@ class OrderAdapter(private val onItemClicked: (Order) -> Unit) :
             } else {
                 val currentTime = System.currentTimeMillis()
                 val diff = currentTime - order.dateAdded
-                val days = TimeUnit.MILLISECONDS.toDays(diff)
+                val days = java.util.concurrent.TimeUnit.MILLISECONDS.toDays(diff)
+
                 binding.textViewDaysAgo.text = when (days) {
                     0L -> "Today"
                     1L -> "1 day ago"

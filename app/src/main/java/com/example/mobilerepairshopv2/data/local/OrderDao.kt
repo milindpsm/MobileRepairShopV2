@@ -37,10 +37,11 @@ interface OrderDao {
     // Query for the simple stats on the orders dashboard
     // This is the updated function inside OrderDao.kt
     @Query("""
-    SELECT
-        (SELECT COUNT(*) FROM orders_table WHERE dateAdded BETWEEN :startDate AND :endDate) as inCount,
-        (SELECT COUNT(*) FROM orders_table WHERE status = 'Out' AND dateCompleted BETWEEN :startDate AND :endDate) as outCount,
-        (SELECT COUNT(*) FROM orders_table WHERE status = 'Pending' AND dateAdded BETWEEN :startDate AND :endDate AND status != 'Out') as pendingCount
-""")
+        SELECT
+            (SELECT COUNT(*) FROM orders_table WHERE dateAdded BETWEEN :startDate AND :endDate) as inCount,
+            (SELECT COUNT(*) FROM orders_table WHERE status = 'Out' AND dateCompleted BETWEEN :startDate AND :endDate) as outCount,
+            (SELECT COUNT(*) FROM orders_table WHERE status = 'Pending' AND dateAdded BETWEEN :startDate AND :endDate AND status != 'Out') as pendingCount
+    """)
     fun getOrderStats(startDate: Long, endDate: Long): Flow<OrderDashboardStats?>
+
 }
