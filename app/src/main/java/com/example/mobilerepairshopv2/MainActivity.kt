@@ -20,7 +20,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mobilerepairshopv2.data.model.Order
 import com.example.mobilerepairshopv2.data.model.Repair
 import com.example.mobilerepairshopv2.databinding.ActivityMainBinding
-import com.example.mobilerepairshopv2.ui.adapter.OrderAdapter
 import com.example.mobilerepairshopv2.ui.adapter.RepairAdapter
 import com.example.mobilerepairshopv2.ui.viewmodel.RepairViewModel
 import com.example.mobilerepairshopv2.ui.viewmodel.RepairViewModelFactory
@@ -43,11 +42,8 @@ class MainActivity : AppCompatActivity() {
         RepairViewModelFactory((application as RepairShopApplication).repository)
     }
     private lateinit var repairAdapter: RepairAdapter
-    private lateinit var orderAdapter: OrderAdapter
     private var currentRepairListObserver: LiveData<List<Repair>>? = null
-    private var currentOrderListObserver: LiveData<List<Order>>? = null
 
-    // This launcher is ONLY for restoring from a backup.
     private val openRestoreFileLauncher = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
         uri?.let {
             readBackupFromFile(it)
@@ -61,7 +57,7 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        setupRecyclerViews()
+        setupRecyclerView()
         setupClickListeners()
         observeData()
         updateDashboardForPeriod("Last 7 Days")
@@ -102,37 +98,34 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    // --- NEW, ROBUST BACKUP FUNCTION USING SHARE INTENT ---
     private fun createAndShareBackup() {
         lifecycleScope.launch {
-            // In a future version, you would combine both lists into a single backup object
             val repairs = viewModel.getRepairsForBackup()
+            val orders = viewModel.getAllOrdersForBackup()
+            val backupData = mapOf("repairs" to repairs, "orders" to orders)
+
             val gson = Gson()
-            val jsonString = gson.toJson(repairs) // For now, we only back up repairs
+            val jsonString = gson.toJson(backupData)
 
             try {
-                // 1. Save the file to a temporary, secure location inside the app's cache
                 val sdf = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault())
                 val fileName = "repair_shop_backup_${sdf.format(Date())}.json"
                 val cachePath = File(cacheDir, "backups")
-                cachePath.mkdirs() // Create the backups directory if it doesn't exist
+                cachePath.mkdirs()
                 val file = File(cachePath, fileName)
                 FileOutputStream(file).use {
                     it.write(jsonString.toByteArray())
                 }
 
-                // 2. Get a secure URI for that file using our FileProvider
                 val contentUri = FileProvider.getUriForFile(this@MainActivity, "${packageName}.provider", file)
 
                 if (contentUri != null) {
-                    // 3. Create a "Share" intent
                     val shareIntent = Intent().apply {
                         action = Intent.ACTION_SEND
                         addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                         setDataAndType(contentUri, contentResolver.getType(contentUri))
                         putExtra(Intent.EXTRA_STREAM, contentUri)
                     }
-                    // 4. Launch the Android Share dialog, allowing the user to choose where to save
                     startActivity(Intent.createChooser(shareIntent, "Save Backup To..."))
                 }
             } catch (e: Exception) {
@@ -146,33 +139,37 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun readBackupFromFile(uri: Uri) {
+        data class BackupData(val repairs: List<Repair>?, val orders: List<Order>?)
+
         try {
             val jsonString = contentResolver.openInputStream(uri)?.use {
                 BufferedReader(InputStreamReader(it)).readText()
             }
             if (jsonString != null) {
-                val type = object : TypeToken<List<Repair>>() {}.type
-                val repairs: List<Repair> = Gson().fromJson(jsonString, type)
-                showRestoreConfirmationDialog(repairs)
+                val gson = Gson()
+                val backupType = object : TypeToken<BackupData>() {}.type
+                val backupData: BackupData? = gson.fromJson(jsonString, backupType)
+
+                showRestoreConfirmationDialog(backupData?.repairs ?: emptyList(), backupData?.orders ?: emptyList())
             }
         } catch (e: Exception) {
             Toast.makeText(this, "Failed to read or parse backup file.", Toast.LENGTH_LONG).show()
         }
     }
 
-    private fun showRestoreConfirmationDialog(repairs: List<Repair>) {
+    private fun showRestoreConfirmationDialog(repairs: List<Repair>, orders: List<Order>) {
         AlertDialog.Builder(this)
             .setTitle("Restore Backup")
             .setMessage("This will overwrite all current data. Are you sure you want to proceed?")
             .setPositiveButton("Restore") { _, _ ->
-                viewModel.restoreBackup(repairs)
+                viewModel.restoreBackup(repairs, orders)
                 Toast.makeText(this, "Restore successful!", Toast.LENGTH_LONG).show()
             }
             .setNegativeButton("Cancel", null)
             .show()
     }
 
-    private fun setupRecyclerViews() {
+    private fun setupRecyclerView() {
         repairAdapter = RepairAdapter { repair ->
             val intent = Intent(this, RepairDetailActivity::class.java).apply {
                 putExtra(RepairDetailActivity.REPAIR_ID, repair.id)
@@ -181,13 +178,6 @@ class MainActivity : AppCompatActivity() {
         }
         binding.recyclerViewRepairs.adapter = repairAdapter
         binding.recyclerViewRepairs.layoutManager = LinearLayoutManager(this)
-
-        orderAdapter = OrderAdapter { order ->
-            val intent = Intent(this, OrderDetailActivity::class.java).apply {
-                putExtra(OrderDetailActivity.ORDER_ID, order.id)
-            }
-            startActivity(intent)
-        }
     }
 
     private fun setupClickListeners() {
@@ -195,10 +185,7 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, AddRepairActivity::class.java)
             startActivity(intent)
         }
-
-        binding.buttonDateFilter.setOnClickListener { view ->
-            showDateFilterMenu(view)
-        }
+        binding.buttonDateFilter.setOnClickListener { view -> showDateFilterMenu(view) }
     }
 
     private fun setupSearch(searchView: SearchView?) {
@@ -217,7 +204,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun observeData() {
         observeRepairList(viewModel.allRepairs)
-        // Note: pendingCount is now part of the main stats query
+        // The separate pendingCount observer has been removed
     }
 
     private fun observeRepairList(repairsLiveData: LiveData<List<Repair>>) {
@@ -258,7 +245,9 @@ class MainActivity : AppCompatActivity() {
                     return@DatePickerDialog
                 }
                 val sdf = SimpleDateFormat("dd/MM/yy", Locale.getDefault())
-                binding.buttonDateFilter.text = "${sdf.format(Date(startDate))} to ${sdf.format(Date(endDate))}"
+                val formattedStartDate = sdf.format(Date(startDate))
+                val formattedEndDate = sdf.format(Date(endDate))
+                binding.buttonDateFilter.text = "$formattedStartDate to $formattedEndDate"
                 observeStats(startDate, endDate)
             }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH))
             endDatePicker.datePicker.minDate = startDate
@@ -271,20 +260,30 @@ class MainActivity : AppCompatActivity() {
 
     private fun updateDashboardForPeriod(period: String) {
         val calendar = Calendar.getInstance()
-        var endDate = calendar.timeInMillis
+        calendar.set(Calendar.HOUR_OF_DAY, 23)
+        calendar.set(Calendar.MINUTE, 59)
+        calendar.set(Calendar.SECOND, 59)
+        val endDate = calendar.timeInMillis
+
+        calendar.set(Calendar.HOUR_OF_DAY, 0)
+        calendar.set(Calendar.MINUTE, 0)
+        calendar.set(Calendar.SECOND, 0)
+        calendar.set(Calendar.MILLISECOND, 0)
+
         when (period) {
-            "Today" -> calendar.set(Calendar.HOUR_OF_DAY, 0)
+            "Today" -> { /* Start is already set */ }
             "Yesterday" -> {
                 calendar.add(Calendar.DAY_OF_YEAR, -1)
-                calendar.set(Calendar.HOUR_OF_DAY, 0)
-                val endOfYesterday = Calendar.getInstance().apply {
-                    add(Calendar.DAY_OF_YEAR, -1)
-                    set(Calendar.HOUR_OF_DAY, 23); set(Calendar.MINUTE, 59); set(Calendar.SECOND, 59)
-                }
-                endDate = endOfYesterday.timeInMillis
+                val endOfYesterday = calendar.clone() as Calendar
+                endOfYesterday.set(Calendar.HOUR_OF_DAY, 23)
+                endOfYesterday.set(Calendar.MINUTE, 59)
+                endOfYesterday.set(Calendar.SECOND, 59)
+                observeStats(calendar.timeInMillis, endOfYesterday.timeInMillis)
+                return
             }
-            "Last 7 Days" -> calendar.add(Calendar.DAY_OF_YEAR, -7)
-            "Last 30 Days" -> calendar.add(Calendar.DAY_OF_YEAR, -30)
+            "Last 7 Days" -> calendar.add(Calendar.DAY_OF_YEAR, -6)
+            "Last 30 Days" -> calendar.add(Calendar.DAY_OF_YEAR, -29)
+            "Last 1 Year" -> calendar.add(Calendar.YEAR, -1)
             "Last 5 Years" -> calendar.add(Calendar.YEAR, -5)
         }
         val startDate = calendar.timeInMillis

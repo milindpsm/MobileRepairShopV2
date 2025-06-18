@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface OrderDao {
 
+
     // Basic Operations
     @Insert
     suspend fun insert(order: Order)
@@ -35,13 +36,22 @@ interface OrderDao {
     fun searchOrders(searchQuery: String): Flow<List<Order>>
 
     // Query for the simple stats on the orders dashboard
-    // This is the updated function inside OrderDao.kt
     @Query("""
         SELECT
-            (SELECT COUNT(*) FROM orders_table WHERE dateAdded BETWEEN :startDate AND :endDate) as inCount,
-            (SELECT COUNT(*) FROM orders_table WHERE status = 'Out' AND dateCompleted BETWEEN :startDate AND :endDate) as outCount,
-            (SELECT COUNT(*) FROM orders_table WHERE status = 'Pending' AND dateAdded BETWEEN :startDate AND :endDate AND status != 'Out') as pendingCount
+            IFNULL(SUM(CASE WHEN status = 'In' AND dateAdded BETWEEN :startDate AND :endDate THEN 1 ELSE 0 END), 0) as inCount,
+            IFNULL(SUM(CASE WHEN status = 'Out' AND dateCompleted BETWEEN :startDate AND :endDate THEN 1 ELSE 0 END), 0) as outCount,
+            IFNULL(SUM(CASE WHEN status = 'Pending' AND dateAdded BETWEEN :startDate AND :endDate THEN 1 ELSE 0 END), 0) as pendingCount
+        FROM orders_table
     """)
     fun getOrderStats(startDate: Long, endDate: Long): Flow<OrderDashboardStats?>
+
+    // One-time fetch for backup
+    @Query("SELECT * FROM orders_table ORDER BY dateAdded DESC")
+    suspend fun getAllOrdersForBackup(): List<Order>
+
+    // Deletes all data for restore
+    @Query("DELETE FROM orders_table")
+    suspend fun clearAll()
+
 
 }
